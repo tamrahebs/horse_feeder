@@ -1,0 +1,5 @@
+To initialize the real time clock (RTC) with the arduino, first upload pcf8523.ino. There's some funny thing with this code to get the clock correct. If it runs correctly the first time, great, if not delete the '!' in the second if statement. I can't remember which is correct. 
+
+relay_on.ino will turn a relay on and off. int relay is where you set which number relay you're looking at. The times are in milliseconds. 
+
+relay_on_wRTC.ino combines relay on and pcf8523. This makes it so you can turn the relay on and off at specific times of day.
