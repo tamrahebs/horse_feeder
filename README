@@ -3,3 +3,7 @@ To initialize the real time clock (RTC) with the arduino, first upload pcf8523.i
 relay_on.ino will turn a relay on and off. int relay is where you set which number relay you're looking at. The times are in milliseconds. 
 
 relay_on_wRTC.ino combines relay on and pcf8523. This makes it so you can turn the relay on and off at specific times of day.
+
+Pirates_of_the_Caribbean_-_Theme_Song.ino plays the pirates theme song on the arduino
+
+horse_feeder.ino will contain all of the horse feeder code this is the master code that will be run.
