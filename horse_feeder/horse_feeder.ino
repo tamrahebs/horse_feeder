@@ -4,12 +4,26 @@ RTC_PCF8523 rtc;
 
 char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-int relay_forwards = 7;
-int relay_backwards = 6;
+int relay_forwards_1 = 2;
+int relay_backwards_1 = 3;
 
-int OnHour = 18;
-int OnMin = 19;
-int OnSec = 40;
+int relay_forwards_2 = 4;
+int relay_backwards_2 = 5;
+
+int relay_forwards_3 = 6;
+int relay_backwards_3 = 7;
+
+int relay_forwards_4 = 8;
+int relay_backwards_4 = 9;
+
+int OnHour_1 = 18;
+int OnMin_1 = 43;
+int OnSec_1 = 1;
+
+int OnHour_2 = 18;
+int OnMin_2 = 44;
+int OnSec_2 = 1;
+
 //int OffHour = 18;
 //int OffMin = 45;
 //int OffSec = 40;
@@ -55,38 +69,6 @@ int notes[] = {       //Note of the song, 0 is a rest/pulse
    NOTE_D5, NOTE_E5, NOTE_A4, 0, 
    NOTE_A4, NOTE_C5, NOTE_B4, NOTE_B4, 0,
    NOTE_C5, NOTE_A4, NOTE_B4, 0,
-
-   NOTE_A4, NOTE_A4, 
-   //Repeat of first part
-   NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, 0, 
-   NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, 0,
-   NOTE_A4, NOTE_G4, NOTE_A4, 0,
-
-   NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, 0, 
-   NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, 0, 
-   NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, 0,
-   NOTE_A4, NOTE_G4, NOTE_A4, 0,
-   
-   NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, 0, 
-   NOTE_A4, NOTE_C5, NOTE_D5, NOTE_D5, 0, 
-   NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, 0,
-   NOTE_E5, NOTE_D5, NOTE_E5, NOTE_A4, 0,
-   
-   NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, 0, 
-   NOTE_D5, NOTE_E5, NOTE_A4, 0, 
-   NOTE_A4, NOTE_C5, NOTE_B4, NOTE_B4, 0,
-   NOTE_C5, NOTE_A4, NOTE_B4, 0,
-   //End of Repeat
-
-   NOTE_E5, 0, 0, NOTE_F5, 0, 0,
-   NOTE_E5, NOTE_E5, 0, NOTE_G5, 0, NOTE_E5, NOTE_D5, 0, 0,
-   NOTE_D5, 0, 0, NOTE_C5, 0, 0,
-   NOTE_B4, NOTE_C5, 0, NOTE_B4, 0, NOTE_A4,
-
-   NOTE_E5, 0, 0, NOTE_F5, 0, 0,
-   NOTE_E5, NOTE_E5, 0, NOTE_G5, 0, NOTE_E5, NOTE_D5, 0, 0,
-   NOTE_D5, 0, 0, NOTE_C5, 0, 0,
-   NOTE_B4, NOTE_C5, 0, NOTE_B4, 0, NOTE_A4
 };
 //*****************************************
 int duration[] = {         //duration of each note (in ms) Quarter Note is set to 250 ms
@@ -109,38 +91,6 @@ int duration[] = {         //duration of each note (in ms) Quarter Note is set t
   250, 125, 250, 125, 
   125, 125, 250, 125, 125,
   125, 125, 375, 375,
-
-  250, 125,
-  //Rpeat of First Part
-  125, 125, 250, 125, 125,
-  125, 125, 250, 125, 125,
-  125, 125, 375, 125, 
-  
-  125, 125, 250, 125, 125, 
-  125, 125, 250, 125, 125,
-  125, 125, 250, 125, 125,
-  125, 125, 375, 125, 
-  
-  125, 125, 250, 125, 125, 
-  125, 125, 250, 125, 125,
-  125, 125, 250, 125, 125,
-  125, 125, 125, 250, 125,
-
-  125, 125, 250, 125, 125, 
-  250, 125, 250, 125, 
-  125, 125, 250, 125, 125,
-  125, 125, 375, 375,
-  //End of Repeat
-  
-  250, 125, 375, 250, 125, 375,
-  125, 125, 125, 125, 125, 125, 125, 125, 375,
-  250, 125, 375, 250, 125, 375,
-  125, 125, 125, 125, 125, 500,
-
-  250, 125, 375, 250, 125, 375,
-  125, 125, 125, 125, 125, 125, 125, 125, 375,
-  250, 125, 375, 250, 125, 375,
-  125, 125, 125, 125, 125, 500
 };
 
 void setup() {
@@ -150,11 +100,17 @@ void setup() {
     Serial.println("Couldn't find RTC");
     while (1);
   }
-  pinMode(relay_forwards, OUTPUT);//set relay as an output
+  pinMode(relay_forwards_1, OUTPUT);//set relay as an output
 
-  pinMode(relay_backwards, OUTPUT);//set relay as an output
-  digitalWrite(relay_forwards, HIGH);
-  digitalWrite(relay_backwards, LOW);
+  pinMode(relay_backwards_1, OUTPUT);//set relay as an output
+  digitalWrite(relay_forwards_1, LOW);
+  digitalWrite(relay_backwards_1, HIGH);
+  
+  pinMode(relay_forwards_2, OUTPUT);//set relay as an output
+
+  pinMode(relay_backwards_2, OUTPUT);//set relay as an output
+  digitalWrite(relay_forwards_2, LOW);
+  digitalWrite(relay_backwards_2, HIGH);
 }
 
 void loop() {
@@ -176,63 +132,102 @@ void loop() {
   Serial.println();
   delay (1000);
 
-// if the current time is the same as the OnHour and OnMin then turn the light on, else turn it off
-  if(now.hour() == OnHour && now.minute() == OnMin && now.second() == OnSec){
-    for (int i=0;i<203;i++){              //203 is the total number of music notes in the song
+// if the current time is the same as the OnHour and OnMin then play the song and extend and retract the linear actuator
+  if(now.hour() == OnHour_1 && now.minute() == OnMin_1 && now.second() == OnSec_1){
+    for (int i=0;i<76;i++){              //203 is the total number of music notes in the song
   int wait = duration[i] * songspeed;
   tone(buzzer,notes[i],wait);          //tone(pin,frequency,duration)
   delay(wait);}//delay is used so it doesn't go to the next loop before tone is finished playing
       
- digitalWrite(relay_forwards, LOW);
+ digitalWrite(relay_forwards_1, HIGH);
 
- digitalWrite(relay_backwards, HIGH);//Activate the relay one direction, they must be different to move the motor
-
+ digitalWrite(relay_backwards_1, LOW);//Activate the relay one direction, they must be different to move the motor
+ 
  delay(12000); // wait 12 seconds
 
- Serial.println("Forward hold 12");
+ Serial.println("hold 10 seconds");
  
 
- digitalWrite(relay_forwards, HIGH);
+ digitalWrite(relay_forwards_1, LOW);
 
- digitalWrite(relay_backwards, HIGH);//Deactivate both relays to brake the motor
+ digitalWrite(relay_backwards_1, LOW);//Deactivate both relays to brake the motor
 
- delay(2000);// wait 2 seconds
+ delay(10000);// wait 10 seconds
 
- Serial.println("hold 2 seconds");
 
- 
- digitalWrite(relay_forwards, HIGH);
+ digitalWrite(relay_forwards_1, LOW);
 
- digitalWrite(relay_backwards, LOW);//Activate the relay the other direction, they must be different to move the motor
+ digitalWrite(relay_backwards_1, HIGH);//Activate the relay the other direction, they must be different to move the motor
 
  delay(12000);// wait 12 seconds
 
-Serial.println("back 12 seconds");
+ OnMin_1 = OnMin_1 + 2;
+
+ if(OnMin_1 == 60){
+      ++OnHour_1;
+//      ++OffHour;
+      OnMin_1 = 0;
+ //     OffMin = 0;
+    }
+    if(OnHour_1 == 24){
+      OnHour_1 = 1;
+ //     OffHour = 1;
+    }
+  }
+  
+ if(now.hour() == OnHour_2 && now.minute() == OnMin_2 && now.second() == OnSec_2){
+    for (int i=0;i<76;i++){              //203 is the total number of music notes in the song
+  int wait = duration[i] * songspeed;
+  tone(buzzer,notes[i],wait);          //tone(pin,frequency,duration)
+  delay(wait);}//delay is used so it doesn't go to the next loop before tone is finished playing
+      
+ digitalWrite(relay_forwards_2, HIGH);
+
+ digitalWrite(relay_backwards_2, LOW);//Activate the relay one direction, they must be different to move the motor
+ 
+ delay(12000); // wait 12 seconds
+
+ Serial.println("hold 10 seconds");
+ 
+
+ digitalWrite(relay_forwards_2, LOW);
+
+ digitalWrite(relay_backwards_2, LOW);//Deactivate both relays to brake the motor
+
+ delay(10000);// wait 10 seconds
 
 
- digitalWrite(relay_forwards, HIGH);
+ digitalWrite(relay_forwards_2, LOW);
 
- digitalWrite(relay_backwards, HIGH);//Deactivate both relays to brake the motor
+ digitalWrite(relay_backwards_2, HIGH);//Activate the relay the other direction, they must be different to move the motor
 
- delay(2000);// wait 2 seconds
+ delay(12000);// wait 12 seconds
 
-Serial.println("Hold 2 seconds");
+
+ //digitalWrite(relay_forwards_1, LOW);
+
+ //digitalWrite(relay_backwards_1, LOW);//Deactivate both relays to brake the motor
+
+ //delay(2000);// wait 2 seconds
+
+//Serial.println("Hold 2 seconds");
+OnMin_2 = OnMin_2 + 2;
     //Serial.println("LIGHT ON");
   
    // else if(now.hour() == OffHour && now.minute() == OffMin && now.second() == OffSec){
     //  digitalWrite(relay,HIGH); // turn relay OFF
     //  Serial.println("LIGHT OFF");
-      OnMin = OnMin + 2;
+    //  OnMin = OnMin + 2;
     //  ++OffMin;
    // }
-    if(OnMin == 60){
-      ++OnHour;
+    if(OnMin_2 == 60){
+      ++OnHour_2;
 //      ++OffHour;
-      OnMin = 0;
+      OnMin_2 = 0;
  //     OffMin = 0;
     }
-    if(OnHour == 24){
-      OnHour = 1;
+    if(OnHour_2 == 24){
+      OnHour_2 = 1;
  //     OffHour = 1;
     }
 }

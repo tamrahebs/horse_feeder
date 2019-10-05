@@ -8,4 +8,4 @@ Pirates_of_the_Caribbean_-_Theme_Song.ino plays the pirates theme song on the ar
 
 linear_actuator.ino extends the linear actuator and then retracts it.
 
-horse_feeder.ino will contain all of the horse feeder code this is the master code that will be run. Currently at a certain time it plays the song then runs the linear actuator, first extending it, then retracting it. And adds 2 minutes until it starts again.
+horse_feeder.ino will contain all of the horse feeder code this is the master code that will be run. Currently at a certain time it plays the song then runs the linear actuator, first extending it, then retracting it. And adds 2 minutes until it starts again. This happens with 2 linear actuators.
