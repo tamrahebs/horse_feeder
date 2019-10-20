@@ -8,4 +8,8 @@ Pirates_of_the_Caribbean_-_Theme_Song.ino plays the pirates theme song on the ar
 
 linear_actuator.ino extends the linear actuator and then retracts it.
 
-horse_feeder.ino will contain all of the horse feeder code this is the master code that will be run. Currently at a certain time it plays the song then runs the linear actuator, first extending it, then retracting it. And adds 2 minutes until it starts again. This happens with 2 linear actuators.
+slide_switch.ino extends and retracts a linear actuator based on whether a switch is on or off. If the switch is on, the linear actuator extends and retracts. If the switch is off, the linear actuator does nothing. 
+
+horse_feeder.ino will contain all of the horse feeder code this is the master code that will be run. Currently there are 2 linear actuators being run by the code. The horse feeder will have 4 linear actuators. Each linear actuator is operated by a switch and a time. If the switch is on, then at a certain time it plays the song then runs the linear actuator, first extending it, then retracting it. If the switch is off, then that linear actuator is skipped. This happens for both linear actuators. 
+
+horse_feeder2.inp is the newest version of the code. This takes the time and switch dependence off the linear actuators. In this version each switch has an associated time. When the switch is on, at the time specified, the song will play an a linear actuator will  extend and retract. The linear actuator being used depends on which one was last used. It'll start with the first one then go down the line to the fourth one. This is what the "count" variable does for you. It allows the code to keep track of which ones have gone. Therefore if you want to turn off a certain time, you can, and the next linear actuator will go with the next time in line.
