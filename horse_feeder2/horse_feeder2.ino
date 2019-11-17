@@ -6,9 +6,13 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 
 const int switchPin_1 = 12; //the switch 1 to connect to pin 12
 const int switchPin_2 = 13; //the switch 2 to connect to pin 13
+const int switchPin_3 = 10; //the switch 3 to connect to pin 10, this is subject to change
+const int switchPin_4 = 11; //the switch 4 to connect to pin 11, this is subject to change
 
 int switchState_1 = 0;         // variable for reading the pushbutton status
 int switchState_2 = 0;
+int switchState_3 = 0;
+int switchState_4 = 0;
 
 const int relay_forwards_1 = 2; // linear actuator 1
 const int relay_backwards_1 = 3;
@@ -31,6 +35,14 @@ int OnSec_1 = 2;
 int OnHour_2 = 15; // time for switch 2
 int OnMin_2 = 17;
 int OnSec_2 = 2;
+
+int OnHour_3 = 15; // time for switch 3
+int OnMin_3 = 19;
+int OnSec_3 = 2;
+
+int OnHour_4 = 15; // time for switch 4
+int OnMin_4 = 21;
+int OnSec_4 = 2;
 
 //for the song to play setup code 
 const int buzzer = 10; //Define pin 10, can use other PWM pins  (5,6 or 9)
@@ -106,6 +118,8 @@ void setup() {
   }
   pinMode(switchPin_1, INPUT); //initialize thebuttonPin as input
   pinMode(switchPin_2, INPUT); //initialize thebuttonPin as input
+  pinMode(switchPin_3, INPUT); //initialize thebuttonPin as input
+  pinMode(switchPin_4, INPUT); //initialize thebuttonPin as input
  
   pinMode(relay_forwards_1, OUTPUT);//set relay as an output
   pinMode(relay_backwards_1, OUTPUT);//set relay as an output
@@ -116,6 +130,16 @@ void setup() {
   pinMode(relay_backwards_2, OUTPUT);//set relay as an output
   digitalWrite(relay_forwards_2, LOW);
   digitalWrite(relay_backwards_2, HIGH);
+
+  pinMode(relay_forwards_3, OUTPUT);//set relay as an output
+  pinMode(relay_backwards_3, OUTPUT);//set relay as an output
+  digitalWrite(relay_forwards_3, LOW);
+  digitalWrite(relay_backwards_3, HIGH);
+
+  pinMode(relay_forwards_4, OUTPUT);//set relay as an output
+  pinMode(relay_backwards_4, OUTPUT);//set relay as an output
+  digitalWrite(relay_forwards_4, LOW);
+  digitalWrite(relay_backwards_4, HIGH);
 }
 
 void loop() {
@@ -180,8 +204,42 @@ void loop() {
     delay(12000);// wait 12 seconds
   }
 
+  if (count == 2){ //run the second linear actuator if the first one has been run
+    digitalWrite(relay_forwards_3, HIGH);
+    digitalWrite(relay_backwards_3, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_3, LOW);
+    digitalWrite(relay_backwards_3, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_3, LOW);
+    digitalWrite(relay_backwards_3, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+  }
+
+  if (count == 3){ //run the second linear actuator if the first one has been run
+    digitalWrite(relay_forwards_4, HIGH);
+    digitalWrite(relay_backwards_4, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_4, LOW);
+    digitalWrite(relay_backwards_4, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_4, LOW);
+    digitalWrite(relay_backwards_4, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+  }
+
   ++count; // add one to the count 
-  if (count == 2){ //curently 2 is the reset, will be 4 when we have them all hooked up
+  if (count == 4){ // all have been used when count is 4 so start again
     count = 0;}
 
    OnMin_1 = OnMin_1 + 2; //just for testing purposes, remove later
@@ -230,8 +288,216 @@ if (count == 0){ //run the first linear actuator if none have been run
     delay(12000);// wait 12 seconds
     //++count uncomment when there are 4 linear actuators
   }
+
+  if (count == 2){ //run the second linear actuator if the first one has been run
+    digitalWrite(relay_forwards_3, HIGH);
+    digitalWrite(relay_backwards_3, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_3, LOW);
+    digitalWrite(relay_backwards_3, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_3, LOW);
+    digitalWrite(relay_backwards_3, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+    //++count uncomment when there are 4 linear actuators
+  }
+
+  if (count == 3){ //run the second linear actuator if the first one has been run
+    digitalWrite(relay_forwards_4, HIGH);
+    digitalWrite(relay_backwards_4, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_4, LOW);
+    digitalWrite(relay_backwards_4, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_4, LOW);
+    digitalWrite(relay_backwards_4, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+    //++count uncomment when there are 4 linear actuators
+  }
   
   OnMin_2 = OnMin_2 + 2; // just for testing purposes, remove later
+  ++count; // add one to the count 
+  if (count == 2){ //curently 2 is the reset, will be 4 when we have them all hooked up
+    count = 0;}
+  }
+  }
+
+  switchState_3 = digitalRead(switchPin_3);
+  if (switchState_3 == HIGH ) { //if it is,the state is HIGH 
+  if(now.hour() == OnHour_3 && now.minute() == OnMin_3 && now.second() == OnSec_3){
+  for (int i=0;i<76;i++){              //203 is the total number of music notes in the song
+  int wait = duration[i] * songspeed;
+  tone(buzzer,notes[i],wait);          //tone(pin,frequency,duration)
+  delay(wait);}//delay is used so it doesn't go to the next loop before tone is finished playing
+
+if (count == 0){ //run the first linear actuator if none have been run
+    digitalWrite(relay_forwards_1, HIGH);
+    digitalWrite(relay_backwards_1, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_1, LOW);
+    digitalWrite(relay_backwards_1, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_1, LOW);
+    digitalWrite(relay_backwards_1, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+  }
+  
+  if (count == 1){ //run the second linear actuator if the first one has been run
+    digitalWrite(relay_forwards_2, HIGH);
+    digitalWrite(relay_backwards_2, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_2, LOW);
+    digitalWrite(relay_backwards_2, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_2, LOW);
+    digitalWrite(relay_backwards_2, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+    //++count uncomment when there are 4 linear actuators
+  }
+
+  if (count == 2){ //run the second linear actuator if the first one has been run
+    digitalWrite(relay_forwards_3, HIGH);
+    digitalWrite(relay_backwards_3, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_3, LOW);
+    digitalWrite(relay_backwards_3, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_3, LOW);
+    digitalWrite(relay_backwards_3, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+    //++count uncomment when there are 4 linear actuators
+  }
+
+  if (count == 3){ //run the second linear actuator if the first one has been run
+    digitalWrite(relay_forwards_4, HIGH);
+    digitalWrite(relay_backwards_4, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_4, LOW);
+    digitalWrite(relay_backwards_4, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_4, LOW);
+    digitalWrite(relay_backwards_4, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+    //++count uncomment when there are 4 linear actuators
+  }
+  
+  OnMin_3 = OnMin_3 + 2; // just for testing purposes, remove later
+  ++count; // add one to the count 
+  if (count == 2){ //curently 2 is the reset, will be 4 when we have them all hooked up
+    count = 0;}
+  }
+  }
+
+  switchState_4 = digitalRead(switchPin_4);
+  if (switchState_4 == HIGH ) { //if it is,the state is HIGH 
+  if(now.hour() == OnHour_4 && now.minute() == OnMin_4 && now.second() == OnSec_4){
+  for (int i=0;i<76;i++){              //203 is the total number of music notes in the song
+  int wait = duration[i] * songspeed;
+  tone(buzzer,notes[i],wait);          //tone(pin,frequency,duration)
+  delay(wait);}//delay is used so it doesn't go to the next loop before tone is finished playing
+
+if (count == 0){ //run the first linear actuator if none have been run
+    digitalWrite(relay_forwards_1, HIGH);
+    digitalWrite(relay_backwards_1, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_1, LOW);
+    digitalWrite(relay_backwards_1, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_1, LOW);
+    digitalWrite(relay_backwards_1, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+  }
+  
+  if (count == 1){ //run the second linear actuator if the first one has been run
+    digitalWrite(relay_forwards_2, HIGH);
+    digitalWrite(relay_backwards_2, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_2, LOW);
+    digitalWrite(relay_backwards_2, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_2, LOW);
+    digitalWrite(relay_backwards_2, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+    //++count uncomment when there are 4 linear actuators
+  }
+
+  if (count == 2){ //run the second linear actuator if the first one has been run
+    digitalWrite(relay_forwards_3, HIGH);
+    digitalWrite(relay_backwards_3, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_3, LOW);
+    digitalWrite(relay_backwards_3, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_3, LOW);
+    digitalWrite(relay_backwards_3, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+    //++count uncomment when there are 4 linear actuators
+  }
+
+  if (count == 3){ //run the second linear actuator if the first one has been run
+    digitalWrite(relay_forwards_4, HIGH);
+    digitalWrite(relay_backwards_4, LOW);//Activate the relay one direction, they must be different to move the motor
+    delay(12000); // wait 12 seconds
+    Serial.println("hold 10 seconds");
+ 
+
+    digitalWrite(relay_forwards_4, LOW);
+    digitalWrite(relay_backwards_4, LOW);//Deactivate both relays to brake the motor
+    delay(10000);// wait 10 seconds
+
+
+    digitalWrite(relay_forwards_4, LOW);
+    digitalWrite(relay_backwards_4, HIGH);//Activate the relay the other direction, they must be different to move the motor
+    delay(12000);// wait 12 seconds
+    //++count uncomment when there are 4 linear actuators
+  }
+  
+  OnMin_4 = OnMin_4 + 2; // just for testing purposes, remove later
   ++count; // add one to the count 
   if (count == 2){ //curently 2 is the reset, will be 4 when we have them all hooked up
     count = 0;}
